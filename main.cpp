@@ -16,12 +16,12 @@ bool countTime = false;
 
 void ScreenTurnOff()
 {
-	system("vcgencmd display_power 0");
+	system("vcgencmd display_power 0 >> /dev/null");
 }
 
 void ScreenTurnOn()
 {
-	system("vcgencmd display_power 1");
+	system("vcgencmd display_power 1 >> /dev/null");
 }
 
 void PinValueChanged()
