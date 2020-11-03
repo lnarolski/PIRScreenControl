@@ -62,6 +62,11 @@ int main()
 	wiringPiSetup();
 	pinMode(PIN, INPUT);
 
+	ScreenTurnOff();
+#ifdef DEBUG
+	std::cout << "Screen turned off" << std::endl;
+#endif // DEBUG
+
 	// Bind to interrupt
 	wiringPiISR(PIN, INT_EDGE_BOTH, &PinValueChanged);
 
