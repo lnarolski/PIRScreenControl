@@ -8,7 +8,7 @@
 #include <ctime>    
 
 #define PIN 8
-#define TIMEOUTTIME 5.0
+double timeoutTime = 60.0;
 
 auto start = std::chrono::system_clock::now();
 bool changing = false;
@@ -26,7 +26,7 @@ void ScreenTurnOn()
 
 void PinValueChanged()
 {
-	if (digitalRead(PIN))
+	if (!digitalRead(PIN))
 	{
 #ifdef DEBUG
 		std::cout << "PIN value: " << digitalRead(PIN) << std::endl;
@@ -57,7 +57,7 @@ void PinValueChanged()
 	}
 }
 
-int main()
+int main(int argc, char* argv[])
 {
 	wiringPiSetup();
 	pinMode(PIN, INPUT);
@@ -66,6 +66,15 @@ int main()
 #ifdef DEBUG
 	std::cout << "Screen turned off" << std::endl;
 #endif // DEBUG
+
+	if (argc > 1)
+	{
+		double setTimeTimeoutTime = (double) atoi(argv[1]);
+		if (setTimeTimeoutTime != 0.0)
+		{
+			timeoutTime = setTimeTimeoutTime;
+		}
+	}
 
 	// Bind to interrupt
 	wiringPiISR(PIN, INT_EDGE_BOTH, &PinValueChanged);
@@ -79,7 +88,7 @@ int main()
 			std::chrono::duration<double> elapsedSeconds = end - start;
 			changing = false;
 
-			if (elapsedSeconds.count() > TIMEOUTTIME)
+			if (elapsedSeconds.count() > timeoutTime)
 			{
 				ScreenTurnOff();
 
